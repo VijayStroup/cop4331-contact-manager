@@ -15,6 +15,7 @@ class DB:
     def new_user(self, name: str, password: str):
         """add a new user to the database"""
 
+        # test2
         pass
 
     def new_contact(self, id: str, name: str):
