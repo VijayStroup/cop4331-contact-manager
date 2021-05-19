@@ -1,5 +1,6 @@
 import sqlite3
 
+
 class DB:
     def __init__(self):
         self.con = sqlite3.connect('contact.db')
@@ -29,3 +30,6 @@ class DB:
         """return a list of contacts for the user"""
 
         pass
+
+
+db = DB()
