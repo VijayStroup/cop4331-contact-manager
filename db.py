@@ -9,7 +9,7 @@ class DB:
     def init(self):
         """initalize database and tables if not created"""
 
-        pass
+        print('hello')
 
     def new_user(self, name: str, password: str):
         """add a new user to the database"""
