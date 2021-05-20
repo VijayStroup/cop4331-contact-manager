@@ -11,7 +11,7 @@ class DB:
 
         self.db.execute(
             '''CREATE TABLE IF NOT EXISTS user (
-                id INTEGER PRIMARY KEY,
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
                 record_created TEXT NOT NULL,
                 last_logged_in TEXT NOT NULL,
                 username TEXT NOT NULL,
@@ -20,13 +20,14 @@ class DB:
 
         self.db.execute(
             '''CREATE TABLE IF NOT EXISTS contact (
-                id integer PRIMARY KEY,
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
                 first_name TEXT NOT NULL,
                 last_name TEXT NOT NULL,
                 email TEXT NOT NULL,
                 phone TEXT NOT NULL,
                 record_created TEXT NOT NULL,
-                FOREIGN KEY (user_id) REFERENCES user (id) NOT NULL
+                user_id INTEGER NOT NULL,
+                FOREIGN KEY (user_id) REFERENCES user (id)
             )''')
         
         self.con.commit()
