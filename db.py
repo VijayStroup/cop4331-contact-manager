@@ -10,7 +10,7 @@ class DB:
         """initalize database and tables if not created"""
 
         self.db.execute(
-            '''CREATE TABLE user (
+            '''CREATE TABLE IF NOT EXISTS user (
                 id INTEGER PRIMARY KEY,
                 record_created TEXT NOT NULL,
                 last_logged_in TEXT NOT NULL,
@@ -19,7 +19,7 @@ class DB:
             )''')
 
         self.db.execute(
-            '''CREATE TABLE contact (
+            '''CREATE TABLE IF NOT EXISTS contact (
                 id integer PRIMARY KEY,
                 first_name TEXT NOT NULL,
                 last_name TEXT NOT NULL,
