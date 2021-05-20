@@ -1,5 +1,5 @@
 import sqlite3
-import datetime
+from datetime import datetime
 
 class DB:
     def __init__(self):
@@ -14,7 +14,7 @@ class DB:
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 record_created TEXT NOT NULL,
                 last_logged_in TEXT NOT NULL,
-                username TEXT NOT NULL,
+                username TEXT NOT NULL UNIQUE,
                 password TEXT NOT NULL
             )''')
 
@@ -31,15 +31,26 @@ class DB:
             )''')
         
         self.con.commit()
-
-    def new_user(self, name: str, password: str):
+        
+    def new_user(self, name: str, password: str) -> tuple:
         """add a new user to the database"""
         
-        time = str(datetime.uctnow())
-        self.db.execute('INSERT INTO user VALUES (?, ?, ?, ?)', 
-                        (time, time, name, password))
+        time = str(datetime.utcnow())
+        
+        try:
+            self.db.execute('''INSERT INTO user
+                            (record_created, last_logged_in, username, password)
+                            VALUES (?, ?, ?, ?)''',
+                            (time, time, name, password))
 
-        self.con.commit()
+            self.con.commit()
+            return (0, None)
+        except sqlite3.Error as e:
+            if type(e.__class__) == type(sqlite3.IntegrityError):
+                return (1, 'Username already exists')
+            else:
+                print(e, e.__class__)
+                return (2, e)
 
     def new_contact(self, id: str, name: str):
         """create a new contact for the user"""
