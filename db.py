@@ -9,12 +9,40 @@ class DB:
     def init(self):
         """initalize database and tables if not created"""
 
-        pass
+        self.db.execute(
+            """CREATE TABLE user (
+                id integer PRIMARY KEY,
+                record_created text,
+                last_logged_in text,
+                username text,
+                password text
+            )""")
+
+        self.db.execute(
+            """CREATE TABLE contact (
+                id integer PRIMARY KEY,
+                first_name text,
+                last_name text,
+                email text,
+                phone text,
+                record_created text,
+                FOREIGN KEY (user_id) REFERENCES user (id)
+            )""")
+        
+        self.con.commit()
 
     def new_user(self, name: str, password: str):
         """add a new user to the database"""
 
-        pass
+        self.db.execute(
+            """INSERT INTO user VALUES (
+                datetime('now'),
+                datetime('now'),
+                name,
+                password
+            )""")
+
+        self.con.commit()
 
     def new_contact(self, id: str, name: str):
         """create a new contact for the user"""
