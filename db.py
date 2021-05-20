@@ -1,5 +1,5 @@
 import sqlite3
-
+import datetime
 
 class DB:
     def __init__(self):
@@ -10,37 +10,33 @@ class DB:
         """initalize database and tables if not created"""
 
         self.db.execute(
-            """CREATE TABLE user (
-                id integer PRIMARY KEY,
-                record_created text,
-                last_logged_in text,
-                username text,
-                password text
-            )""")
+            '''CREATE TABLE user (
+                id INTEGER PRIMARY KEY,
+                record_created TEXT NOT NULL,
+                last_logged_in TEXT NOT NULL,
+                username TEXT NOT NULL,
+                password TEXT NOT NULL
+            )''')
 
         self.db.execute(
-            """CREATE TABLE contact (
+            '''CREATE TABLE contact (
                 id integer PRIMARY KEY,
-                first_name text,
-                last_name text,
-                email text,
-                phone text,
-                record_created text,
-                FOREIGN KEY (user_id) REFERENCES user (id)
-            )""")
+                first_name TEXT NOT NULL,
+                last_name TEXT NOT NULL,
+                email TEXT NOT NULL,
+                phone TEXT NOT NULL,
+                record_created TEXT NOT NULL,
+                FOREIGN KEY (user_id) REFERENCES user (id) NOT NULL
+            )''')
         
         self.con.commit()
 
     def new_user(self, name: str, password: str):
         """add a new user to the database"""
-
-        self.db.execute(
-            """INSERT INTO user VALUES (
-                datetime('now'),
-                datetime('now'),
-                name,
-                password
-            )""")
+        
+        time = str(datetime.uctnow())
+        self.db.execute('INSERT INTO user VALUES (?, ?, ?, ?)', 
+                        (time, time, name, password))
 
         self.con.commit()
 
