@@ -3,7 +3,7 @@ from datetime import datetime
 
 class DB:
     def __init__(self):
-        self.con = sqlite3.connect('contact.db')
+        self.con = sqlite3.connect('contact.db', check_same_thread=False)
         self.db = self.con.cursor()
 
     def init(self):
