@@ -7,7 +7,6 @@ router = APIRouter(
     responses = {404: {'description': 'Not found'}},
 )
 
-#line 11 to 18 is 1 route
 @router.post('/user')
 def new_user(name: str, password: str):
     user = {
@@ -16,7 +15,6 @@ def new_user(name: str, password: str):
     }
     error, message = db.new_user(name, password) 
 
-    #return user and error message
     if not error:
         return {'user': user, 'error': message}
     else: 
