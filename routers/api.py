@@ -17,6 +17,7 @@ def new_user(name: str, password: str):
 
     return {'user': user}
 
+
 @router.get('/contact')
 def get_all_contacts(id: str):
     contacts, error, message = db.get_contacts(id)
@@ -26,11 +27,12 @@ def get_all_contacts(id: str):
     else:
         pass
 
+
 @router.delete('/contact')
 def delete_contact(id: str, name: str):
-    error, message = db.del_contact(id, name)
+    contact, error, message = db.del_contact(id, name)
 
     if not error:
-        return {'error': message}
+        return {'contact': contact, 'error': message}
     else:
         pass
