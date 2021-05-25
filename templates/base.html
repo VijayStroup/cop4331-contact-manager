@@ -4,16 +4,15 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Manager</title>
   <link href="{{ url_for('static', path='/main.css') }}" rel="stylesheet">
   <link rel="shortcut icon" href="{{ url_for('static', path='/favicon.ico') }}" type="image/x-icon">
-  <title>Contact </title>
 </head>
 <body>
-  <nav>
-    <ul>
-      <li>Nav1</li>
-      <li>Nav2</li>
-      <li>Nav3</li>
+  <nav class="nav">
+    <ul class="nav-items">
+      <li class="nav-item"><a href="/">Home</a></li>
+      <li class="nav-item"><a href="/contacts">Contacts</a></li>
     </ul>
   </nav>
   <main>{% block main %}{% endblock %}</main>
