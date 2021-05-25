@@ -4,17 +4,15 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="{{ url_for('static', path='/main.css') }}" rel="stylesheet">
-  <link rel="shortcut icon" href="{{ url_for('static', path='/favicon.ico') }}" type="image/x-icon">
-  <title>Contact </title>
+  <title>Contact Manager</title>
+  <link rel="stylesheet" href="/home/gnewbery/cop4331-contact-manager/templates/main.css">
 </head>
 <body>
-  <nav>
-    <ul>
-      <li>Home</li>
-      <li>Contacts</li>
+  <nav class="nav">
+    <ul class="nav-items">
+      <li class="nav-item"><a href="/">Home</a></li>
+      <li class="nav-item"><a href="/Contacts">Contacts</a></li>
     </ul>
   </nav>
-  <main>{% block main %}{% endblock %}</main>
 </body>
 </html>
