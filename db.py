@@ -55,6 +55,9 @@ class DB:
     def new_contact(self, id: str, name: str):
         """create a new contact for the user"""
 
+        #return value for now until I find more details on this method
+        return (0, 1)
+
         pass
 
     def del_contact(self, id: str, name: str):
