@@ -7,6 +7,7 @@ router = APIRouter(
     responses = {404: {'description': 'Not found'}},
 )
 
+
 @router.post('/user')
 def new_user(name: str, password: str):
     user = {
@@ -23,6 +24,7 @@ def new_user(name: str, password: str):
         else:
             raise HTTPException(status_code=500, detail=message)
 
+
 @router.post('/contact')
 def new_contact(id: str, name: str):
     contact = {
@@ -37,3 +39,25 @@ def new_contact(id: str, name: str):
     else:
         #status_code=500 because I'm not sure what specific issue would be raised
         raise HTTPException(status_code=500, detail=message)
+
+    return {'user': user}
+
+
+@router.get('/contact')
+def get_all_contacts(id: str):
+    contacts, error, message = db.get_contacts(id)
+
+    if not error:
+        return {'contacts': contacts, 'error': message}
+    else:
+        pass
+
+
+@router.delete('/contact')
+def delete_contact(id: str, name: str):
+    contact, error, message = db.del_contact(id, name)
+
+    if not error:
+        return {'contact': contact, 'error': message}
+    else:
+        pass
