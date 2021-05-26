@@ -31,7 +31,7 @@ class DB:
 
         self.con.commit()
 
-    def new_user(self, name: str, password: str) -> tuple:
+    def new_user(self, user: dict) -> tuple:
         """add a new user to the database"""
 
         time = str(datetime.utcnow())
@@ -40,7 +40,7 @@ class DB:
             self.db.execute('''INSERT INTO user
                 (record_created, last_logged_in, username, password)
                 VALUES (?, ?, ?, ?)''',
-                (time, time, name, password)
+                (time, time, user['name'], user['password'])
             )
             self.con.commit()
             return (0, None)

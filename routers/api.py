@@ -1,5 +1,7 @@
 from db import db
-from fastapi import APIRouter, HTTPException
+from middleware.auth import auth
+from models.models import Contact
+from fastapi import APIRouter, HTTPException, Depends
 
 router = APIRouter(
     prefix = '/api',
@@ -14,50 +16,31 @@ def new_user(name: str, password: str):
         'name': name,
         'password': password
     }
-    error, message = db.new_user(name, password) 
+    error, message = db.new_user(user) 
 
-    if not error:
-        return {'user': user, 'error': message}
-    else: 
-        if error == 1:
-            raise HTTPException(status_code=409, detail=message)
-        else:
-            raise HTTPException(status_code=500, detail=message)
+    if not error: return {'user': user, 'error': message}
+    else: raise HTTPException(status_code=error, detail=message)
 
 
 @router.post('/contact')
-def new_contact(id: str, name: str):
-    contact = {
-        'id': 1, #per request in github
-        'name': name
-    }
+def new_contact(contact: Contact, user=Depends(auth.verify)):
+    error, message = db.new_contact(user['id'], contact)
 
-    error, message = db.new_contact(id, name)
-
-    if not error:
-        return {'id': 1, 'error': message}
-    else:
-        #status_code=500 because I'm not sure what specific issue would be raised
-        raise HTTPException(status_code=500, detail=message)
-
-    return {'user': user}
-
-
-@router.get('/contact')
-def get_all_contacts(id: str):
-    contacts, error, message = db.get_contacts(id)
-
-    if not error:
-        return {'contacts': contacts, 'error': message}
-    else:
-        pass
+    if not error: return {'contact': contact, 'error': message}
+    else: raise HTTPException(status_code=error, detail=message)
 
 
 @router.delete('/contact')
-def delete_contact(id: str, name: str):
-    contact, error, message = db.del_contact(id, name)
+def delete_contact(contact: Contact, user=Depends(auth.verify)):
+    error, message = db.del_contact(user['id'], contact)
 
-    if not error:
-        return {'contact': contact, 'error': message}
-    else:
-        pass
+    if not error: return {'contact': contact, 'error': message}
+    else: raise HTTPException(status_code=error, detail=message)
+
+
+@router.get('/contact')
+def get_all_contacts(user=Depends(auth.verify)):
+    contacts, error, message = db.get_contacts(user['id'])
+
+    if not error: return {'contacts': contacts, 'error': message}
+    else: raise HTTPException(status_code=error, detail=message)
