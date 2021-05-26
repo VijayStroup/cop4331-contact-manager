@@ -64,7 +64,7 @@ class DB:
 
         pass
 
-    def get_user(self, username: str) -> tuple:
+    def get_user(self, id: int) -> tuple:
         """return user and error"""
 
         pass

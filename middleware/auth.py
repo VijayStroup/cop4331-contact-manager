@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 import jwt
+from db import db
 from fastapi import Security, HTTPException
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 
@@ -27,18 +28,16 @@ class Auth:
 
         try:
             payload = jwt.decode(token, self.secret, algorithms=['HS256'])
-            # check user in db
-            user = None
-            if not user:
-                raise HTTPException(status_code=404, detail='User not found')
+            user, error, message = db.get_user(payload['id'])
+            if not user: raise HTTPException(status_code=error, detail=message)
         except jwt.ExpiredSignatureError:
             raise HTTPException(status_code=500, detail='Signature has expired')
         except jwt.InvalidTokenError as e:
             raise HTTPException(status_code=401, detail='Invalid token')
-        
-        # update last logged in
 
-        return user[0] # return user id from db
+        db.update_user_activity(payload['id'])
+
+        return user
 
     def verify(self, auth: HTTPAuthorizationCredentials = Security(security)):
         """wrapper function for routes"""
