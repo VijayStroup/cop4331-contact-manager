@@ -1,7 +1,41 @@
 {% extends "base.html" %}
 
 {% block main %}
-<h1 class="log_in">Log In</h1>
-<input type="text" id="username" autofocus placeholder="Username">
-<input type="password" id="password" autofocus placeholder="Password">
+<div>
+  <h1>Contacts</h1>
+  <form>
+    <input type="text" id="contact-first_name" autofocus required placeholder="First Name">
+    <input type="text" id="contact-last_name" autofocus required placeholder="Last Name">
+    <input type="text" id="contact-email" autofocus required placeholder="Email">
+    <input type="text" id="contact-phone" autofocus required placeholder="Phone #">
+    <button>New</button>
+  </form>
+
+  <input placeholder="Search">
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Email</th>
+        <th>Phone #</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>1</td>
+        <td><input value="John"></td>
+        <td><input value="Doe"></td>
+        <td><input value="j.doe@example.com"></td>
+        <td><input value="1111111111"></td>
+        <td>
+          <button>Save</button>
+          <button>Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 {% endblock main %}
