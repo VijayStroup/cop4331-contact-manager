@@ -6,14 +6,14 @@ from fastapi import APIRouter, HTTPException, Depends
 router = APIRouter(
     prefix = '/api',
     tags = ['api'],
-    responses = {404: {'description': 'Not found'}},
+    responses = {404: {'description': 'Not found'}}
 )
 
 
 @router.post('/user')
-def new_user(name: str, password: str):
+def new_user(username: str, password: str):
     user = {
-        'name': name,
+        'username': username,
         'password': password
     }
     error, message = db.new_user(user) 
@@ -22,12 +22,22 @@ def new_user(name: str, password: str):
     else: raise HTTPException(status_code=error, detail=message)
 
 
+@router.post('/login')
+def login(username: str, password: str):
+    pass
+
+
 @router.post('/contact')
 def new_contact(contact: Contact, user=Depends(auth.verify)):
     error, message = db.new_contact(user['id'], contact)
 
     if not error: return {'contact': contact, 'error': message}
     else: raise HTTPException(status_code=error, detail=message)
+
+
+@router.put('/contact')
+def update_contact(old_email: str, contact: Contact, user=Depends(auth.verify)):
+    pass
 
 
 @router.delete('/contact')
@@ -44,3 +54,8 @@ def get_all_contacts(user=Depends(auth.verify)):
 
     if not error: return {'contacts': contacts, 'error': message}
     else: raise HTTPException(status_code=error, detail=message)
+
+
+@router.get('/search')
+def search_contacts(search: str, user=Depends(auth.verify)):
+    pass

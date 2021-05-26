@@ -40,7 +40,7 @@ class DB:
             self.db.execute('''INSERT INTO user
                 (record_created, last_logged_in, username, password)
                 VALUES (?, ?, ?, ?)''',
-                (time, time, user['name'], user['password'])
+                (time, time, user['username'], user['password'])
             )
             self.con.commit()
             return (0, None)
@@ -61,6 +61,28 @@ class DB:
 
     def get_contacts(self, id: int) -> tuple:
         """return a list of contacts for the user"""
+
+        pass
+
+    def get_user(self, username: str) -> tuple:
+        """return user and error"""
+
+        pass
+
+    def update_user_activity(self, id: int) -> tuple:
+        """update user last_logged_in time"""
+
+        pass
+
+    def update_contact(self, id: int, old_email: str, contact: dict) -> tuple:
+        """update contact where id is user id and old_email is the contact's
+        current email with the new contact dict payload"""
+
+        pass
+
+    def search(self, id: int, name: str) -> tuple:
+        """return a list of contacts that have a partial match to the name
+        string"""
 
         pass
 
