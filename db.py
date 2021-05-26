@@ -1,5 +1,6 @@
 import sqlite3
 from datetime import datetime
+from middleware.hash import hash_password
 
 
 class DB:
@@ -40,7 +41,7 @@ class DB:
             self.db.execute('''INSERT INTO user
                 (record_created, last_logged_in, username, password)
                 VALUES (?, ?, ?, ?)''',
-                (time, time, user['username'], user['password'])
+                (time, time, user['username'], hash_password(user['password'], user['username']))
             )
             self.con.commit()
             return (0, None)
