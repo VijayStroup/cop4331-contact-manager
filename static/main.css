@@ -77,6 +77,10 @@ main {
   justify-content: center;
   border-radius: 1rem;
 }
+.login > form {
+  display: flex;
+  flex-direction: column;
+}
 .title {
   font-weight: 800;
   font-size: 3rem;
@@ -90,17 +94,20 @@ main {
   margin: 1rem 0;
   padding: .5rem;
 }
-#login {
+#login-btn {
   border: none;
   outline: none;
   border-radius: .5rem;
   font-size: 2rem;
   cursor: pointer;
   margin-top: 1rem;
-  transition: box-shadow var(--trans-fast);
+  padding: .25rem 1rem;
+  background-color: var(--color-2);
+  transition: all var(--trans-fast);
 }
-#login:hover {
+#login-btn:hover {
   box-shadow: var(--shadow);
+  background-color: var(--color-1);
 }
 
 @media only screen and (max-width: 550px) {
