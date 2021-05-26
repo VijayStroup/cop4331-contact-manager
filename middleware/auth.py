@@ -44,3 +44,6 @@ class Auth:
         """wrapper function for routes"""
 
         return self.decode_token(auth.credentials)
+
+
+auth = Auth()
