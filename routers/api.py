@@ -24,7 +24,10 @@ def new_user(username: str, password: str):
 
 @router.post('/login')
 def login(username: str, password: str):
-    pass
+    user, token, error, message = db.get_user(username, password)
+
+    if not error: return {'user': user, 'token': token, 'error': message}
+    else: raise HTTPException(status_code=error, detail=message)
 
 
 @router.post('/contact')
@@ -36,8 +39,11 @@ def new_contact(contact: Contact, user=Depends(auth.verify)):
 
 
 @router.put('/contact')
-def update_contact(id: int, contact: Contact, user=Depends(auth.verify)):
-    pass
+def update_contact(contact: Contact, user=Depends(auth.verify)):
+    error, message = db.update_contact(user['id'], contact['id'], contact)
+
+    if not error: return {'contact': contact, 'error': message}
+    else: raise HTTPException(status_code=error, detail=message)
 
 
 @router.delete('/contact')
@@ -58,4 +64,7 @@ def get_all_contacts(user=Depends(auth.verify)):
 
 @router.get('/search')
 def search_contacts(search: str, user=Depends(auth.verify)):
-    pass
+    contacts, error, message = db.search(user['id'], search)
+
+    if not error: return {'contacts': contacts, 'error': message}
+    else: raise HTTPException(status_code=error, detail=message)

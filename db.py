@@ -1,12 +1,14 @@
 import sqlite3
 from datetime import datetime
 from middleware.hash import hash_password
+from middleware.auth import auth
 
 
 class DB:
     def __init__(self):
         self.con = sqlite3.connect('contact.db', check_same_thread=False)
         self.db = self.con.cursor()
+
 
     def init(self):
         """initalize database and tables if not created"""
@@ -32,6 +34,7 @@ class DB:
 
         self.con.commit()
 
+
     def new_user(self, user: dict) -> tuple:
         """add a new user to the database"""
 
@@ -50,30 +53,57 @@ class DB:
                 return (409, 'Username already exists')
             else: return (500, e)
 
+
     def new_contact(self, id: int, contact: dict) -> tuple:
         """create a new contact for the user"""
 
         pass
+
 
     def del_contact(self, id: int, contact: dict) -> tuple:
         """delete contact for the user"""
 
         pass
 
+
     def get_contacts(self, id: int) -> tuple:
         """return a list of contacts for the user"""
 
         pass
 
-    def get_user(self, id: int) -> tuple:
-        """return user and error"""
 
-        pass
+    def get_user(self, username: str, password: str) -> tuple:
+        """return user and error"""
+        
+        try:
+            self.db.execute('''SELECT * FROM user
+                WHERE username = (?) AND password = (?)''',
+                username, hash_password(password, username))
+            self.con.commit()
+
+            user = self.db.fetchone()
+            if not user: return (user, None, 401, 'Unauthorized')
+            else: return (user, auth.encode_token(user['id']), 0, None)
+        except sqlite3.Error as e:
+            return (self.db.fetchone(), None, 500, e)
+
 
     def update_user_activity(self, id: int) -> tuple:
         """update user last_logged_in time"""
 
-        pass
+        time = str(datetime.utcnow())
+
+        try:
+            self.db.execute('''UPDATE user
+                SET last_logged_in = (?) WHERE id = (?)''', time, id)
+            self.con.commit()
+
+            self.db.execute('SELECT * FROM user WHERE id = (?)', id)
+            self.con.commit()
+            return (self.db.fetchone(), 0, None)
+        except sqlite3.Error as e:
+            return (self.db.fetchone(), 500, e)
+
 
     def update_contact(self, id: int, contact_id: int, contact: dict) -> tuple:
         """update contact where id is user id and contact_id is the contact's
@@ -81,11 +111,18 @@ class DB:
 
         pass
 
-    def search(self, id: int, name: str) -> tuple:
-        """return a list of contacts that have a partial match to the name
+
+    def search(self, id: int, search: str) -> tuple:
+        """return a list of contacts that have a partial match to the search
         string"""
 
-        pass
+        try:
+            self.db.execute('''SELECT * FROM user
+                WHERE id = (?) AND * LIKE %(?)%''', id, search)
+            self.con.commit()
+            return (self.db.fetchall(), 0, None)
+        except sqlite3.Error as e:
+            return (self.db.fetchall(), 500, e)
 
 
 db = DB()

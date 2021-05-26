@@ -11,7 +11,8 @@ class Auth:
     def __init__(self):
         self.secret = 'secret'
 
-    def encode_token(self, id: str):
+
+    def encode_token(self, id: int):
         """return encoded jwt token after logging in"""
 
         return jwt.encode({
@@ -22,6 +23,7 @@ class Auth:
             self.secret,
             algorithm='HS256'
         )
+
 
     def decode_token(self, token):
         """decode jwt token and return user id from db if valid"""
@@ -38,6 +40,7 @@ class Auth:
         db.update_user_activity(payload['id'])
 
         return user
+
 
     def verify(self, auth: HTTPAuthorizationCredentials = Security(security)):
         """wrapper function for routes"""
