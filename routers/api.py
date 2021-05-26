@@ -36,7 +36,7 @@ def new_contact(contact: Contact, user=Depends(auth.verify)):
 
 
 @router.put('/contact')
-def update_contact(old_email: str, contact: Contact, user=Depends(auth.verify)):
+def update_contact(id: int, contact: Contact, user=Depends(auth.verify)):
     pass
 
 

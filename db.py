@@ -74,9 +74,9 @@ class DB:
 
         pass
 
-    def update_contact(self, id: int, old_email: str, contact: dict) -> tuple:
-        """update contact where id is user id and old_email is the contact's
-        current email with the new contact dict payload"""
+    def update_contact(self, id: int, contact_id: int, contact: dict) -> tuple:
+        """update contact where id is user id and contact_id is the contact's
+        id with the new contact dict payload"""
 
         pass
 
