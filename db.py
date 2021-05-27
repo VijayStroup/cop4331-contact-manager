@@ -115,8 +115,8 @@ class DB:
         string"""
 
         try:
-            self.db.execute('''SELECT * FROM user
-                WHERE id = ? AND * LIKE %?%''', (id, search))
+            self.db.execute('''SELECT * FROM contact
+                WHERE user_id = ? AND * LIKE %?%''', (id, search))
             return (self.db.fetchall(), 0, None)
         except sqlite3.Error as e:
             return (None, 500, e)
