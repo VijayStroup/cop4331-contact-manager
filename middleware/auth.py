@@ -23,7 +23,6 @@ class Auth:
             algorithm='HS256'
         )
 
-
     def decode_token(self, token):
         """decode jwt token and return user id from db if valid"""
 
@@ -39,7 +38,6 @@ class Auth:
         db.update_user_activity(payload['id'])
 
         return user
-
 
     def verify(self, auth: HTTPAuthorizationCredentials = Security(security)):
         """wrapper function for routes"""

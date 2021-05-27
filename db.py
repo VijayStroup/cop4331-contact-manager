@@ -33,7 +33,6 @@ class DB:
 
         self.con.commit()
 
-
     def new_user(self, user: dict) -> tuple:
         """add a new user to the database"""
 
@@ -52,12 +51,10 @@ class DB:
                 return (409, 'Username already exists')
             else: return (500, e)
 
-
     def new_contact(self, id: int, contact: dict) -> tuple:
         """create a new contact for the user"""
 
         pass
-
 
     def del_contact(self, id: int, contact: dict) -> tuple:
         """delete contact for the user"""
@@ -69,7 +66,6 @@ class DB:
         """return a list of contacts for the user"""
 
         pass
-
 
     def get_user(self, username: str, password: str) -> tuple:
         """return user and error"""
@@ -125,10 +121,9 @@ class DB:
         try:
             self.db.execute('''SELECT * FROM user
                 WHERE id = ? AND * LIKE %?%''', id, search)
-            self.con.commit()
             return (self.db.fetchall(), 0, None)
         except sqlite3.Error as e:
-            return (self.db.fetchall(), 500, e)
+            return (None, 500, e)
 
 
 db = DB()
