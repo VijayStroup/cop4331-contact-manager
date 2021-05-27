@@ -61,7 +61,6 @@ class DB:
 
         pass
 
-
     def get_contacts(self, id: int) -> tuple:
         """return a list of contacts for the user"""
 
@@ -73,7 +72,7 @@ class DB:
         try:
             self.db.execute('''SELECT * FROM user
                 WHERE username = ? AND password = ?''',
-                username, hash_password(password, username))
+                (username, hash_password(password, username)))
 
             user = self.db.fetchone()
 
@@ -98,13 +97,11 @@ class DB:
 
         try:
             self.db.execute('''UPDATE user
-                SET last_logged_in = ? WHERE id = ?''', time, id)
+                SET last_logged_in = ? WHERE id = ?''', (time, id))
             self.con.commit()
-
-            self.db.execute('SELECT * FROM user WHERE id = ?', id)
-            return (self.db.fetchone(), 0, None)
+            return (0, None)
         except sqlite3.Error as e:
-            return (None, 500, e)
+            return (500, e)
 
 
     def update_contact(self, id: int, contact_id: int, contact: dict) -> tuple:
@@ -113,14 +110,13 @@ class DB:
 
         pass
 
-
     def search(self, id: int, search: str) -> tuple:
         """return a list of contacts that have a partial match to the search
         string"""
 
         try:
             self.db.execute('''SELECT * FROM user
-                WHERE id = ? AND * LIKE %?%''', id, search)
+                WHERE id = ? AND * LIKE %?%''', (id, search))
             return (self.db.fetchall(), 0, None)
         except sqlite3.Error as e:
             return (None, 500, e)
