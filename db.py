@@ -1,6 +1,7 @@
 import sqlite3
 from datetime import datetime
 from middleware.hash import hash_password
+from middleware.auth import auth
 
 
 class DB:
@@ -65,15 +66,43 @@ class DB:
 
         pass
 
-    def get_user(self, id: int) -> tuple:
+    def get_user(self, username: str, password: str) -> tuple:
         """return user and error"""
+        
+        try:
+            self.db.execute('''SELECT * FROM user
+                WHERE username = ? AND password = ?''',
+                (username, hash_password(password, username)))
 
-        pass
+            user = self.db.fetchone()
+
+            user = {
+                'id' : user[0],
+                'record_created' : user[1],
+                'last_logged_in' : user[2],
+                'username' : user[3],
+                'password' : user[4]
+            }
+
+            if not user: return (None, None, 401, 'Unauthorized')
+            else: return (user, auth.encode_token(user['id']), 0, None)
+        except sqlite3.Error as e:
+            return (None, None, 500, e)
+
 
     def update_user_activity(self, id: int) -> tuple:
         """update user last_logged_in time"""
 
-        pass
+        time = str(datetime.utcnow())
+
+        try:
+            self.db.execute('''UPDATE user
+                SET last_logged_in = ? WHERE id = ?''', (time, id))
+            self.con.commit()
+            return (0, None)
+        except sqlite3.Error as e:
+            return (500, e)
+
 
     def update_contact(self, id: int, contact_id: int, contact: dict) -> tuple:
         """update contact where id is user id and contact_id is the contact's
@@ -81,11 +110,16 @@ class DB:
 
         pass
 
-    def search(self, id: int, name: str) -> tuple:
-        """return a list of contacts that have a partial match to the name
+    def search(self, id: int, search: str) -> tuple:
+        """return a list of contacts that have a partial match to the search
         string"""
 
-        pass
+        try:
+            self.db.execute('''SELECT * FROM contact
+                WHERE user_id = ? AND * LIKE %?%''', (id, search))
+            return (self.db.fetchall(), 0, None)
+        except sqlite3.Error as e:
+            return (None, 500, e)
 
 
 db = DB()
