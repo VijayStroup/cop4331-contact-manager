@@ -11,7 +11,6 @@ class Auth:
     def __init__(self):
         self.secret = 'secret'
 
-
     def encode_token(self, id: int):
         """return encoded jwt token after logging in"""
 
