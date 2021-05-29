@@ -1,13 +1,17 @@
 import sqlite3
 from datetime import datetime
 from middleware.hash import hash_password
-from middleware.auth import auth
 
 
 class DB:
     def __init__(self):
         self.con = sqlite3.connect('contact.db', check_same_thread=False)
         self.db = self.con.cursor()
+        self.auth = None
+        self.init()
+    
+    def setup(self, auth):
+        self.auth = auth
 
     def init(self):
         """initalize database and tables if not created"""
@@ -75,6 +79,7 @@ class DB:
                 (username, hash_password(password, username)))
 
             user = self.db.fetchone()
+            if not user: return (None, None, 401, 'Unauthorized')
 
             user = {
                 'id' : user[0],
@@ -84,11 +89,31 @@ class DB:
                 'password' : user[4]
             }
 
-            if not user: return (None, None, 401, 'Unauthorized')
-            else: return (user, auth.encode_token(user['id']), 0, None)
+            return (user, self.auth.encode_token(user['id']), 0, None)
         except sqlite3.Error as e:
             return (None, None, 500, e)
 
+    def lookup_user(self, id: int) -> tuple:
+        """return user for decode_token function"""
+
+        try:
+            self.db.execute('SELECT * FROM user WHERE id = ?', (id,))
+
+            user = self.db.fetchone()
+            if not user: return (None, 401, 'Unauthorized')
+
+            user = {
+                'id' : user[0],
+                'record_created' : user[1],
+                'last_logged_in' : user[2],
+                'username' : user[3],
+                'password' : user[4]
+            }
+            print(user)
+
+            return (user, 0, None)
+        except sqlite3.Error as e:
+            return (None, 500, e)
 
     def update_user_activity(self, id: int) -> tuple:
         """update user last_logged_in time"""
@@ -120,6 +145,3 @@ class DB:
             return (self.db.fetchall(), 0, None)
         except sqlite3.Error as e:
             return (None, 500, e)
-
-
-db = DB()
