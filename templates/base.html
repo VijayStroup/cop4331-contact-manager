@@ -14,8 +14,20 @@
     <ul class="nav-items">
       <li class="nav-item"><a href="/">Home</a></li>
       <li class="nav-item"><a href="/contacts">Contacts</a></li>
+      {% if username %}
+      <li class="nav-item" style="cursor: pointer;"><a onclick="logout()">Logout</a></li>
+      {% else %}
+      <li class="nav-item"><a href="/login">Login</a></li>
+      {% endif %}
     </ul>
   </nav>
   <main>{% block main %}{% endblock %}</main>
+
+  <script>
+    function logout() {
+      document.cookie = 'token='
+      window.location.replace('/')
+    }
+  </script>
 </body>
 </html>

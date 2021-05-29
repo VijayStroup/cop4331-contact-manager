@@ -1,16 +1,8 @@
 {% extends "base.html" %}
 
 {% block main %}
-<div class="login">
-  <h1 class="title">Login</h1>
-  <form>
-    <input type="text" id="username" autofocus required placeholder="Username">
-    <input type="password" id="password" required placeholder="Password">
-    <button id="login-btn">Login</button>
-  </form>
-  <a href="/register">Register</a>
+<div class="welcome">
+  <h1 class="title">Hi, {{ username }}.</h1> 
+  <a class="goto-contacts" href="/contacts"><button>View Contacts</button></a>
 </div>
-
-<!-- <h1>Hi, Name</h1>  -->
-<script src="{{ url_for('static', path='/login.js') }}"></script>
 {% endblock main %}
