@@ -124,6 +124,27 @@ main {
   background-color: var(--color-1);
 }
 
+/* welcome */
+.welcome {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.welcome > .title {
+  font-size: 5rem;
+  margin-bottom: 5rem;
+}
+.welcome > .goto-contacts > button {
+  font-size: 2rem;
+  background-color: var(--color-2);
+  font-weight: 800;
+  transition: background-color var(--trans-fast);
+}
+.welcome > .goto-contacts > button:hover {
+  background-color: var(--color-1);
+}
+
 /* contacts */
 .contacts {
   display: flex;
