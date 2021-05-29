@@ -4,10 +4,12 @@
 <div class="contacts">
   <h1 class="title">Contacts</h1>
   <form class="new-contact">
-    <input type="text" id="contact-first_name" required placeholder="First Name">
-    <input type="text" id="contact-last_name" required placeholder="Last Name">
-    <input type="text" id="contact-email" required placeholder="Email">
-    <input type="text" id="contact-phone" required placeholder="Phone #">
+    <div class="new-contact-fields">
+      <input type="text" id="contact-first_name" required placeholder="First Name">
+      <input type="text" id="contact-last_name" required placeholder="Last Name">
+      <input type="text" id="contact-email" required placeholder="Email">
+      <input type="text" id="contact-phone" required placeholder="Phone #">
+    </div>
     <button id="add-contact">New</button>
   </form>
 
@@ -15,7 +17,7 @@
     <input placeholder="Search">
     <button id="search">Go</button>
   </div>
-  <div style="overflow: auto;">
+  <div style="overflow-x:auto;">
     <table class="table">
       <thead class="table-head">
         <tr>
@@ -30,10 +32,14 @@
       <tbody class="table-body">
         <tr>
           <td class="table-id">1</td>
-          <td class="table-first_name"><input value="John"></td>
+          <!-- <td class="table-first_name"><input value="John"></td>
           <td class="table-last_name"><input value="Doe"></td>
           <td class="table-email"><input value="j.doe@example.com"></td>
-          <td class="table-phone"><input value="1111111111"></td>
+          <td class="table-phone"><input value="1111111111"></td> -->
+          <td class="table-first_name">John</td>
+          <td class="table-first_name">John</td>
+          <td class="table-first_name">John</td>
+          <td class="table-first_name">John</td>
           <td class="table-actions">
             <button id="save-contact">
               <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-check-lg" viewBox="0 0 16 16">
