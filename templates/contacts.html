@@ -4,10 +4,12 @@
 <div class="contacts">
   <h1 class="title">Contacts</h1>
   <form class="new-contact">
-    <input type="text" id="contact-first_name" required placeholder="First Name">
-    <input type="text" id="contact-last_name" required placeholder="Last Name">
-    <input type="text" id="contact-email" required placeholder="Email">
-    <input type="text" id="contact-phone" required placeholder="Phone #">
+    <div class="new-contact-fields">
+      <input type="text" id="contact-first_name" required placeholder="First Name">
+      <input type="text" id="contact-last_name" required placeholder="Last Name">
+      <input type="text" id="contact-email" required placeholder="Email">
+      <input type="text" id="contact-phone" required placeholder="Phone #">
+    </div>
     <button id="add-contact">New</button>
   </form>
 
@@ -15,7 +17,8 @@
     <input placeholder="Search">
     <button id="search">Go</button>
   </div>
-  <div style="overflow: auto;">
+
+  <div style="overflow-x:auto;">
     <table class="table">
       <thead class="table-head">
         <tr>
