@@ -1,5 +1,4 @@
-from db import db
-from middleware.auth import auth
+from clients import auth, db
 from models.models import Contact
 from fastapi import APIRouter, HTTPException, Depends
 
