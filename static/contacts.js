@@ -2,6 +2,7 @@ const first_name = document.getElementById('contact-first_name');
 const last_name = document.getElementById('contact-last_name');
 const email = document.getElementById('contact-email');
 const phone = document.getElementById('contact-phone');
+cont search = document.getElementById('search');
 
 export function getCookie(cname) {
   if (typeof window != 'undefined') {
@@ -50,7 +51,20 @@ document.querySelector('#add-contact').addEventListener('click', () => {
 
 // search
 document.querySelector('#search').addEventListener('click', () => {
-  console.log('search')
+  const jwt = getCookie('token');
+
+  fetch("/api/search", {
+    method: 'get',
+    headers: {
+      "Content-Type": "application/json",
+      "Accept": "application/json",
+      "Authorization": `Bearer ${jwt}`
+    },
+    body: JSON.stringify(search.innerText)
+  })
+
+  .then(Response => Response.json())
+  .then(search => console.log(search['contacts']))
 })
 
 // update contact row
