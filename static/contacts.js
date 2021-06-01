@@ -1,7 +1,7 @@
-const first_name = document.getElementById('contact-first_name').innerText;
-const last_name = document.getElementById('contact-last_name').innerText;
-const email = document.getElementById('contact-email').innerText;
-const phone = document.getElementById('contact-phone').innerText;
+const first_name = document.getElementById('contact-first_name');
+const last_name = document.getElementById('contact-last_name');
+const email = document.getElementById('contact-email');
+const phone = document.getElementById('contact-phone');
 
 export function getCookie(cname) {
   if (typeof window != 'undefined') {
@@ -26,11 +26,11 @@ document.querySelector('#add-contact').addEventListener('click', () => {
 
   const jwt = getCookie('token');
   
-  var data = {
-    first_name,
-    last_name,
-    email,
-    phone
+  const data = {
+    first_name: first_name.innerText,
+    last_name: last_name.innerText,
+    email: email.innerText,
+    phone: phone.innerText
   }
 
   fetch("/api/contact", {
@@ -58,11 +58,11 @@ document.querySelector('#save-contact').addEventListener('click', () => {
 
   const jwt = getCookie('token');
   
-  var data = {
-    first_name,
-    last_name,
-    email,
-    phone
+  const data = {
+    first_name: first_name.innerText,
+    last_name: last_name.innerText,
+    email: email.innerText,
+    phone: phone.innerText
   }
   
   fetch("/api/contact", {
@@ -84,11 +84,11 @@ document.querySelector('#delete-contact').addEventListener('click', () => {
 
   const jwt = getCookie('token');
   
-  var data = {
-    first_name,
-    last_name,
-    email,
-    phone
+  const data = {
+    first_name: first_name.innerText,
+    last_name: last_name.innerText,
+    email: email.innerText,
+    phone: phone.innerText
   }
 
   fetch("api/contact", {
