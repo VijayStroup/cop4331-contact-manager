@@ -11,8 +11,7 @@ document.querySelector('#login-btn').addEventListener('click', () => {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'Accept': 'application/json',
-      'Authorization': `Bearer ${jwt}`
+      'Accept': 'application/json'
     },
     body: JSON.stringify({
       username: user_input, 
