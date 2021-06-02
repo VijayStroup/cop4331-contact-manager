@@ -18,10 +18,7 @@ def new_user(name: str, password: str):
     if not error:
         return {'user': user, 'error': message}
     else: 
-        if error == 1:
-            raise HTTPException(status_code=409, detail=message)
-        else:
-            raise HTTPException(status_code=500, detail=message)
+        raise HTTPException(status_code=error, detail=message)
 
 @router.post('/contact')
 def new_contact(id: str, name: str):
