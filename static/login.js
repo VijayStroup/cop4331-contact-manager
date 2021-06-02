@@ -19,12 +19,9 @@ document.querySelector('#login-btn').addEventListener('click', () => {
     })
   })
   
-  .then(res => res.json)
-  .then(data => console.log(data['token']))
   .then(res => {
     if (res.ok) {
-      setCookie('token', data['token'], 30); 
-      console.log('Success')
+      res.json().then(data => setCookie('token', data['token'], 30));
     } else {
       console.log('Incorrect username/password')
     }

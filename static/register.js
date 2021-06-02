@@ -16,7 +16,7 @@ document.querySelector('#register-btn').addEventListener('click', () => {
     })
   })
   
-  .then(res => res.json)
+  .then(res => res.json())
   .then(data => console.log('Success')) 
   .catch(error => console.error('Error'))
 })
