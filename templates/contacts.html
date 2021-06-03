@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block main %}
+<div class="contacts">
+  <h1 class="title">Contacts</h1>
+  <form class="new-contact">
+    <div class="new-contact-fields">
+      <input type="text" id="contact-first_name" required placeholder="First Name">
+      <input type="text" id="contact-last_name" required placeholder="Last Name">
+      <input type="text" id="contact-email" required placeholder="Email">
+      <input type="text" id="contact-phone" required placeholder="Phone #">
+    </div>
+    <button id="add-contact">New</button>
+  </form>
+
+  <div class="search">
+    <input placeholder="Search">
+    <button id="search">Go</button>
+  </div>
+
+  <div style="overflow-x:auto;">
+    <table class="table">
+      <thead class="table-head">
+        <tr>
+          <th>ID</th>
+          <th>First Name</th>
+          <th>Last Name</th>
+          <th>Email</th>
+          <th>Phone #</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody class="table-body">
+        {% for contact in contacts %}
+        <tr>
+          <td class="table-id">{{ contact['id'] }}</td>
+          <td class="table-first_name"><input value="{{ contact['first_name'] }}"></td>
+          <td class="table-last_name"><input value="{{ contact['last_name'] }}"></td>
+          <td class="table-email"><input value="{{ contact['email'] }}"></td>
+          <td class="table-phone"><input value="{{ contact['phone'] }}"></td>
+          <td class="table-actions">
+            <button id="save-contact">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-check-lg" viewBox="0 0 16 16">
+                <path d="M13.485 1.431a1.473 1.473 0 0 1 2.104 2.062l-7.84 9.801a1.473 1.473 0 0 1-2.12.04L.431 8.138a1.473 1.473 0 0 1 2.084-2.083l4.111 4.112 6.82-8.69a.486.486 0 0 1 .04-.045z"/>
+              </svg>
+            </button>
+            <button id="delete-contact">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                <path d="M1.293 1.293a1 1 0 0 1 1.414 0L8 6.586l5.293-5.293a1 1 0 1 1 1.414 1.414L9.414 8l5.293 5.293a1 1 0 0 1-1.414 1.414L8 9.414l-5.293 5.293a1 1 0 0 1-1.414-1.414L6.586 8 1.293 2.707a1 1 0 0 1 0-1.414z"/>
+              </svg>
+            </button>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+<script src="{{ url_for('static', path='/contacts.js') }}"></script>
+{% endblock main %}

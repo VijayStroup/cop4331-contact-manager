@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block main %}
+<div class="login">
+  <h1 class="title">Register</h1>
+  <form>
+    <input type="text" id="username" autofocus required placeholder="Username">
+    <input type="password" id="password" required placeholder="Password">
+    <button id="register-btn">Register</button>
+  </form>
+</div>
+<script src="{{ url_for('static', path='/register.js') }}"></script>
+{% endblock main %}

@@ -193,7 +193,6 @@ class DB:
             return (0, None)
         except sqlite3.Error as e:
             return (500, e) 
-            
 
     def search(self, id: int, search: str) -> tuple:
         """return a list of contacts that have a partial match to the search
@@ -201,7 +200,7 @@ class DB:
 
         try:
             self.db.execute('''SELECT * FROM contact
-                WHERE user_id = ? AND * LIKE %?%''', (id, search))
+                WHERE user_id = ? LIKE %?%''', (id, search))
             return (self.db.fetchall(), 0, None)
         except sqlite3.Error as e:
             return (None, 500, e)
