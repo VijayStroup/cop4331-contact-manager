@@ -34,11 +34,11 @@
       <tbody class="table-body">
         {% for contact in contacts %}
         <tr>
-          <td class="table-id">{{ contact['id'] }}</td>
-          <td class="table-first_name"><input value="{{ contact['first_name'] }}"></td>
-          <td class="table-last_name"><input value="{{ contact['last_name'] }}"></td>
-          <td class="table-email"><input value="{{ contact['email'] }}"></td>
-          <td class="table-phone"><input value="{{ contact['phone'] }}"></td>
+          <td class="table-id">{{ contact[0] }}</td>
+          <td class="table-first_name"><input value="{{ contact[1] }}"></td>
+          <td class="table-last_name"><input value="{{ contact[2] }}"></td>
+          <td class="table-email"><input value="{{ contact[3] }}"></td>
+          <td class="table-phone"><input value="{{ contact[4] }}"></td>
           <td class="table-actions">
             <button id="save-contact">
               <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-check-lg" viewBox="0 0 16 16">

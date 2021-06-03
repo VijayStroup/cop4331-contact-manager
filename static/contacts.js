@@ -6,6 +6,8 @@ const search = document.getElementById('search');
 const errorNode = document.querySelector('#error');
 
 async function addContact() {
+  if (!first_name.value || !last_name.value || !email.value || !phone.value) return
+
   const data = {
     first_name: first_name.value,
     last_name: last_name.value,
@@ -81,7 +83,7 @@ document.querySelector('#save-contact').addEventListener('click', () => {
 document.querySelector('#delete-contact').addEventListener('click', () => {
 
   const jwt = getCookie('token');
-  
+
   const data = {
     first_name: first_name.innerText,
     last_name: last_name.innerText,
