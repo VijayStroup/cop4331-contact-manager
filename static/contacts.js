@@ -2,52 +2,36 @@ const first_name = document.getElementById('contact-first_name');
 const last_name = document.getElementById('contact-last_name');
 const email = document.getElementById('contact-email');
 const phone = document.getElementById('contact-phone');
-cont search = document.getElementById('search');
+const search = document.getElementById('search');
+const errorNode = document.querySelector('#error');
 
-export function getCookie(cname) {
-  if (typeof window != 'undefined') {
-    let name = cname + '='
-    let decodedCookie = decodeURIComponent(document.cookie)
-    let ca = decodedCookie.split(';')
-    for(let i = 0; i <ca.length; i++) {
-      let c = ca[i]
-      while (c.charAt(0) == ' ') {
-        c = c.substring(1)
-      }
-      if (c.indexOf(name) == 0) {
-        return c.substring(name.length, c.length)
-      }
-    }
-  }
-  return null
-}
-
-// add contact
-document.querySelector('#add-contact').addEventListener('click', () => {
-
-  const jwt = getCookie('token');
-  
+async function addContact() {
   const data = {
-    first_name: first_name.innerText,
-    last_name: last_name.innerText,
-    email: email.innerText,
-    phone: phone.innerText
+    first_name: first_name.value,
+    last_name: last_name.value,
+    email: email.value,
+    phone: phone.value
   }
 
-  fetch("/api/contact", {
-    method: 'post',
+  const res = await fetch("/api/contact", {
+    method: 'POST',
     headers: {
       "Content-Type": "application/json",
       "Accept": "application/json",
-      'Authorization': `Bearer ${jwt}`
+      'Authorization': `Bearer ${getCookie('token')}`
       
     },
     body: JSON.stringify(data)
   })
-
-  .then(Response => Response.json())
-  .then(data => console.log('add contact'))
-})
+  const j = await res.json()
+  if (!res.ok) {
+    errorNode.style.display = 'block'
+    errorNode.textContent = j.detail
+  } else {
+    errorNode.style.display = 'none'
+    window.location.replace('/contacts')
+  }
+}
 
 // search
 document.querySelector('#search').addEventListener('click', () => {

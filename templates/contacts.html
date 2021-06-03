@@ -3,15 +3,16 @@
 {% block main %}
 <div class="contacts">
   <h1 class="title">Contacts</h1>
-  <form class="new-contact">
+  <div class="new-contact">
     <div class="new-contact-fields">
       <input type="text" id="contact-first_name" required placeholder="First Name">
       <input type="text" id="contact-last_name" required placeholder="Last Name">
       <input type="text" id="contact-email" required placeholder="Email">
       <input type="text" id="contact-phone" required placeholder="Phone #">
     </div>
-    <button id="add-contact">New</button>
-  </form>
+    <button id="add-contact" onclick="addContact()">New</button>
+    <div><p style="display: hidden;color: red;" id="error"></p></div>
+  </div>
 
   <div class="search">
     <input placeholder="Search">

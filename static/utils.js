@@ -30,3 +30,8 @@ function delCookie(cname) {
   if (typeof window != 'undefined')
     document.cookie = cname + '=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;'
 }
+
+function logout() {
+  delCookie('token')
+  window.location.replace('/')
+}

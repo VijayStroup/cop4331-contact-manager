@@ -72,6 +72,7 @@ class DB:
             return (0, None)
         except sqlite3.Error as e:
             if type(e.__class__) == type(sqlite3.IntegrityError):
+                print(e)
                 return (409, 'Contact already exists')
             else: return (500, e)
 

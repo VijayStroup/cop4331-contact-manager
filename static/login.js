@@ -22,13 +22,7 @@ async function login() {
     errorNode.textContent = j.detail
   } else {
     errorNode.style.display = 'none'
-    console.log(j.token)
     setCookie('token', j.token, 30)
     window.location.replace('/')
   }
-}
-
-function logout() {
-  delCookie('token')
-  window.location.replace('/')
 }
