@@ -1,34 +1,32 @@
-// on login
-document.querySelector('#login-btn').addEventListener('click', () => {
-  console.log('login')
+const user_input = document.querySelector('#username');
+const pass_input = document.querySelector('#password');
+const errorNode = document.querySelector('#error');
 
-  const user_input = document.querySelector('#username').value;
-  const pass_input = document.querySelector('#password').value;
-
-  const jwt = getCookie('token');
+async function login() {
+  if (!user_input.value || !pass_input.value) return
   
-  fetch('/api/login', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json'
-    },
-    body: JSON.stringify({
-      username: user_input, 
-      password: pass_input
-    })
+  const params = new URLSearchParams({
+    username: user_input.value,
+    password: pass_input.value
   })
-  
-  .then(res => {
-    if (res.ok) {
-      res.json().then(data => setCookie('token', data['token'], 30));
-    } else {
-      console.log('Incorrect username/password')
+
+  const res = await fetch(`http://localhost:8000/api/login?${params}`, {
+    headers: {
+      'Content-Type': 'application/json'
     }
   })
 
-  .catch(error => console.error('Error', error))
-})
+  const j = await res.json()
+  if (!res.ok) {
+    errorNode.style.display = 'block'
+    errorNode.textContent = j.detail
+  } else {
+    errorNode.style.display = 'none'
+    console.log(j.token)
+    setCookie('token', j.token, 30)
+    window.location.replace('/')
+  }
+}
 
 function logout() {
   delCookie('token')

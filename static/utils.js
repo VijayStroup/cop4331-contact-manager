@@ -4,10 +4,7 @@ function setCookie(cname, cvalue, exdays) {
     d.setTime(d.getTime() + (exdays*24*60*60*1000))
     const expires = 'expires='+ d.toUTCString()
 
-    if (process.env.NEXT_PUBLIC_STATUS == 'dev')
-      document.cookie = `${cname}=${cvalue};${expires};samesite=strict;path=/`
-    else
-      document.cookie = `${cname}=${cvalue};${expires};secure;samesite=strict;path=/`
+    document.cookie = `${cname}=${cvalue};${expires};samesite=strict;path=/`
   }
 }
 

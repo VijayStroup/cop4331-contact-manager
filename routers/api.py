@@ -21,7 +21,7 @@ def new_user(user: User):
     raise HTTPException(status_code=error, detail=message)
 
 
-@router.post('login')
+@router.get('/login')
 def login(username: str, password: str):
     user, token, error, message = db.get_user(username, password)
 
@@ -29,7 +29,7 @@ def login(username: str, password: str):
     else: raise HTTPException(status_code=error, detail=message)
 
 
-@router.post('contact')
+@router.post('/contact')
 def new_contact(contact: Contact, user=Depends(auth.verify)):
     error, message = db.new_contact(user['id'], contact)
 
@@ -37,7 +37,7 @@ def new_contact(contact: Contact, user=Depends(auth.verify)):
     else: raise HTTPException(status_code=error, detail=message)
 
 
-@router.put('contact')
+@router.put('/contact')
 def update_contact(contact_id: int, contact: Contact, user=Depends(auth.verify)):
     error, message = db.update_contact(user['id'], contact_id, contact)
 
@@ -45,7 +45,7 @@ def update_contact(contact_id: int, contact: Contact, user=Depends(auth.verify))
     else: raise HTTPException(status_code=error, detail=message)
 
 
-@router.delete('contact')
+@router.delete('/contact')
 def delete_contact(contact: Contact, user=Depends(auth.verify)):
     error, message = db.del_contact(user['id'], contact)
 
@@ -53,7 +53,7 @@ def delete_contact(contact: Contact, user=Depends(auth.verify)):
     else: raise HTTPException(status_code=error, detail=message)
 
 
-@router.get('contact')
+@router.get('/contact')
 def get_all_contacts(user=Depends(auth.verify)):
     contacts, error, message = db.get_contacts(user['id'])
 
@@ -61,7 +61,7 @@ def get_all_contacts(user=Depends(auth.verify)):
     else: raise HTTPException(status_code=error, detail=message)
 
 
-@router.get('search')
+@router.get('/search')
 def search_contacts(search: str, user=Depends(auth.verify)):
     contacts, error, message = db.search(user['id'], search)
 
