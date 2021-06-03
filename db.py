@@ -64,9 +64,9 @@ class DB:
 
         try:
             self.db.execute('''INSERT INTO contact
-                (id, first_name, last_name, email, phone, record_created, user_id)
-                VALUES (?, ?, ?, ?, ?, ?, ?)''',
-                (id, contact.first_name, contact.last_name, contact.email, contact.phone,
+                (first_name, last_name, email, phone, record_created, user_id)
+                VALUES (?, ?, ?, ?, ?, ?)''',
+                (contact.first_name, contact.last_name, contact.email, contact.phone,
                 time, id)
             )
             self.con.commit()
@@ -82,8 +82,8 @@ class DB:
         try:
             #sql = "DELETE FROM contact WHERE user_id = id"
             self.db.execute('''DELETE FROM contact
-                WHERE id = ?''',
-                (id))
+                WHERE user_id = ? AND email = ?''',
+                (id, contact.email))
             self.con.commit()
             return (0, None)
         except sqlite3.Error as e:
@@ -96,9 +96,9 @@ class DB:
 
         try:
             self.db.execute(''' SELECT * FROM contact
-                WHERE id = ?''',
+                WHERE user_id = ?''',
                 (id))
-            contact = self.db.fetchone()
+            contact = self.db.fetchall()
             if not contact: return (None, None, 401, 'Unauthorized')
 
             contact = {
