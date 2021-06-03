@@ -1,22 +1,27 @@
+const usernameInput = document.querySelector('#username')
+const passwordInput = document.querySelector('#password')
+const errorNode = document.querySelector('#error')
+
 // on register
-document.querySelector('#register-btn').addEventListener('click', () => {
-  console.log('register')
+async function register() {
+  if (!usernameInput.value || !passwordInput.value) return
 
-  const usernameInput = document.querySelector('#username').value;
-  const passwordInput = document.querySelector('#password').value;
-
-  fetch('/api/user', {
+  const res = await fetch('http://localhost:8000/api/user', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-      username: usernameInput, 
-      password: passwordInput
+      username: usernameInput.value,
+      password: passwordInput.value
     })
   })
-  
-  .then(res => res.json())
-  .then(data => console.log('Success')) 
-  .catch(error => console.error('Error'))
-})
+
+  const j = await res.json()
+  if (!res.ok) {
+    errorNode.textContent = j.detail
+  } else {
+    console.log('all good')
+    window.location.replace('/login')
+  }
+}
