@@ -1,5 +1,4 @@
-from os import name
-from routers.pages import contacts
+from models.models import Contact
 import sqlite3
 from datetime import datetime
 from middleware.hash import hash_password
@@ -57,7 +56,7 @@ class DB:
                 return (409, 'Username already exists')
             else: return (500, e)
 
-    def new_contact(self, id: int, contact: dict) -> tuple:
+    def new_contact(self, id: int, contact: Contact) -> tuple:
         """create a new contact for the user"""
 
         time = str(datetime.utcnow())
@@ -80,44 +79,29 @@ class DB:
         """delete contact for the user"""
 
         try:
-            #sql = "DELETE FROM contact WHERE user_id = id"
             self.db.execute('''DELETE FROM contact
                 WHERE user_id = ? AND email = ?''',
                 (id, contact.email))
             self.con.commit()
             return (0, None)
         except sqlite3.Error as e:
-            #not certain what sort of error behavior will occur
             return (500, e)
-
 
     def get_contacts(self, id: int) -> tuple:
         """return a list of contacts for the user"""
 
         try:
             self.db.execute(''' SELECT * FROM contact
-                WHERE user_id = ?''',
-                (id))
-            contact = self.db.fetchall()
-            if not contact: return (None, None, 401, 'Unauthorized')
-
-            contact = {
-                'id' : contact[0],
-                'first_name' : contact[1],
-                'last_name' : contact[2],
-                'email' : contact[3],
-                'phone' : contact[4],
-                'record_created' : contact[5],
-                'user_id' : contact[6]
-            }
-
-            return (contact, self.auth.encode_token(contact['id']), 0, None)
+                WHERE user_id = ?''', (id,)
+            )
+            contacts = self.db.fetchall()
+            return (contacts, 0, None)
         except sqlite3.Error as e:
-            return (None, None, 500, e)
+            return (None, 500, e)
 
     def get_user(self, username: str, password: str) -> tuple:
         """return user and error"""
-        
+
         try:
             self.db.execute('''SELECT * FROM user
                 WHERE username = ? AND password = ?''',
@@ -154,7 +138,6 @@ class DB:
                 'username' : user[3],
                 'password' : user[4]
             }
-            print(user)
 
             return (user, 0, None)
         except sqlite3.Error as e:
@@ -174,21 +157,16 @@ class DB:
             return (500, e)
 
 
-    def update_contact(self, id: int, contact_id: int, contact: dict) -> tuple:
+    def update_contact(self, id: int, contact_id: int, contact: Contact) -> tuple:
         """update contact where id is user id and contact_id is the contact's
         id with the new contact dict payload"""
 
-        time = str(datetime.utcnow())
-
         try:
-            #we need to find the data where the contact_id resides
-            new_contact, new_id, error, message = DB.get_contacts(self, contact_id)
+            self.db.execute('''UPDATE contact SET first_name=?, last_name=?,
+                email=?, phone=? WHERE user_id=? AND contact_id=?
+            ''', (contact.first_name, contact.last_name, contact.email, 
+                  contact.phone, id, contact_id))
 
-            self.db.execute('''UPDATE contact
-                SET id = ? AND first_name = ? AND last_name = ? AND email = ? AND phone = ?
-                AND record_created = ? AND user_id = ? WHERE id = ?)''',
-                (new_contact.id, new_contact.first_name, new_contact.last_name, new_contact.email, 
-            new_contact.phone, time, contact_id, id))
             self.con.commit()
             return (0, None)
         except sqlite3.Error as e:

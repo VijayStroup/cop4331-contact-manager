@@ -10,7 +10,7 @@ class Auth:
     def __init__(self):
         self.secret = 'secret'
         self.db = None
-    
+
     def setup(self, db):
         self.db = db
 
