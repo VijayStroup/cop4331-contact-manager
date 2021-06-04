@@ -69,20 +69,23 @@ async function addRowHandlers() {
 window.onload = addRowHandlers();
 
 async function delContact(data) {
-  const jwt = getCookie('token')
-
-  const res = await fetch('/api/contact', {
-    method: 'DELETE',
-    headers:{
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
-      'Authorization': `Bearer ${jwt}`
-    },
-    body: JSON.stringify(data)
-  })
-
-  if (res.ok) {
-    window.location.reload()
+  const c = confirm('Are you sure you want to delete?')
+  if (c) {
+    const jwt = getCookie('token')
+  
+    const res = await fetch('/api/contact', {
+      method: 'DELETE',
+      headers:{
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${jwt}`
+      },
+      body: JSON.stringify(data)
+    })
+  
+    if (res.ok) {
+      window.location.reload()
+    }
   }
 }
 
@@ -98,12 +101,17 @@ async function updateContact(id, data) {
       'Accept': 'application/json',
       'Authorization': `Bearer ${jwt}`
     },
-
     body: JSON.stringify(data)
   })
 
+  const j = await res.json()
+
   if (res.ok) {
+    errorNode.style.display = 'none'
     window.location.reload()
+  } else {
+    errorNode.style.display = 'block'
+    errorNode.textContent = j.detail
   }
 }
 

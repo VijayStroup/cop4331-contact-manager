@@ -177,7 +177,8 @@ class DB:
             self.con.commit()
             return (0, None)
         except mysql.connector.Error as e:
-            return (500, e)
+            if e.errno == 1062: return (409, 'Contact already exists')
+            else: return (500, e)
 
     def search(self, id: int, search: str) -> tuple:
         """return a list of contacts that have a partial match to the search
