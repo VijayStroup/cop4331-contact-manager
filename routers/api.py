@@ -38,7 +38,7 @@ def new_contact(contact: Contact, user=Depends(auth.verify)):
 
 
 @router.put('/contact')
-def update_contact(contact_id: int, contact: Contact, user=Depends(auth.verify)):
+def update_contact(contact_id: str, contact: Contact, user=Depends(auth.verify)):
     error, message = db.update_contact(user['id'], contact_id, contact)
 
     if not error: return {'contact': contact, 'error': message}

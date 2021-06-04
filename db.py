@@ -157,16 +157,16 @@ class DB:
         except sqlite3.Error as e:
             return (500, e)
 
-
-    def update_contact(self, id: int, contact_id: int, contact: Contact) -> tuple:
+    def update_contact(self, id: int, contact_id: str, contact: Contact) -> tuple:
         """update contact where id is user id and contact_id is the contact's
         id with the new contact dict payload"""
 
         try:
             self.db.execute('''UPDATE contact SET first_name=?, last_name=?,
-                email=?, phone=? WHERE user_id=? AND contact_id=?
-            ''', (contact.first_name, contact.last_name, contact.email, 
-                  contact.phone, id, contact_id))
+                email=?, phone=? WHERE user_id=? AND id=?''',
+            (contact.first_name, contact.last_name, contact.email, contact.phone,
+             id, contact_id)
+            )
 
             self.con.commit()
             return (0, None)
