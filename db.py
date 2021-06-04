@@ -185,8 +185,8 @@ class DB:
 
         try:
             self.db.execute('''SELECT * FROM contact
-                WHERE user_id=%s AND first_name LIKE %s OR last_name LIKE %s OR email LIKE %s
-                OR phone LIKE %s''',
+                WHERE user_id=%s AND (first_name LIKE %s OR last_name LIKE %s OR email LIKE %s
+                OR phone LIKE %s)''',
                 (id, f'%{search}%', f'%{search}%', f'%{search}%', f'%{search}%'))
             return (self.db.fetchall(), 0, None)
         except mysql.connector.Error as e:
