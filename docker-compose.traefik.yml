@@ -23,7 +23,7 @@ services:
       - mysql
 
   mysql:
-    image: cop-db
+    image: mysql
     volumes:
       - cop-mysql:/var/lib/mysql
     environment:
