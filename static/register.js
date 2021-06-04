@@ -6,7 +6,7 @@ const errorNode = document.querySelector('#error')
 async function register() {
   if (!usernameInput.value || !passwordInput.value) return
 
-  const res = await fetch('http://localhost:8000/api/user', {
+  const res = await fetch('/api/user', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -21,7 +21,6 @@ async function register() {
   if (!res.ok) {
     errorNode.textContent = j.detail
   } else {
-    console.log('all good')
     window.location.replace('/login')
   }
 }

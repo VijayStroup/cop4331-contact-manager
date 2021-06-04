@@ -41,16 +41,18 @@ async function addRowHandlers() {
   const buttons = table.querySelectorAll('tr td button')
   for (i = 0; i < buttons.length; i++) {
     const createClickHandler = (btn) => {
-      return function() {
-        const row = btn.parentElement.parentElement
-        if (i % 2 == 0) { // save
+      const row = btn.parentElement.parentElement
+      if (i % 2 == 0) { // save
+        return function() {
           updateContact(row.children[0].innerHTML, {
             first_name: row.children[1].children[0].value,
             last_name: row.children[2].children[0].value,
             email: row.children[3].children[0].value,
             phone: row.children[4].children[0].value
           })
-        } else { // delete
+        }
+      } else { // delete
+        return function() {
           delContact({
             first_name: row.children[1].children[0].value,
             last_name: row.children[2].children[0].value,
@@ -59,7 +61,8 @@ async function addRowHandlers() {
           })
         }
       }
-    }  
+      
+    }
     buttons[i].onclick = createClickHandler(buttons[i]);
   }
 }
@@ -68,7 +71,7 @@ window.onload = addRowHandlers();
 async function delContact(data) {
   const jwt = getCookie('token')
 
-  const res = await fetch('api/contact', {
+  const res = await fetch('/api/contact', {
     method: 'DELETE',
     headers:{
       'Content-Type': 'application/json',
@@ -86,11 +89,9 @@ async function delContact(data) {
 async function updateContact(id, data) {
   if (!data.first_name || !data.last_name || !data.email || !data.phone) return
 
-  console.log(data, id)
-
   const jwt = getCookie('token')
 
-  const res = await fetch(`api/contact?contact_id=${id}`, {
+  const res = await fetch(`/api/contact?contact_id=${id}`, {
     method: 'PUT',
     headers:{
       'Content-Type': 'application/json',

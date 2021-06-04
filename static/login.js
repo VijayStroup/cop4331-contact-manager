@@ -10,7 +10,7 @@ async function login() {
     password: pass_input.value
   })
 
-  const res = await fetch(`http://localhost:8000/api/login?${params}`, {
+  const res = await fetch(`/api/login?${params}`, {
     headers: {
       'Content-Type': 'application/json'
     }
