@@ -7,10 +7,6 @@ services:
       - cop
       - traefik-public
     deploy:
-      resources:
-        limits:
-          cpus: '0.1'
-          memory: 100M
       labels:
         - traefik.enable=true
         - traefik.docker.network=traefik-public
@@ -30,8 +26,6 @@ services:
     image: mysql
     volumes:
       - cop-mysql:/var/lib/mysql
-    ports:
-      - 3306:3306
     environment:
       MYSQL_RANDOM_ROOT_PASSWORD: 'yes'
       MYSQL_DATABASE: 'contacts'
@@ -43,7 +37,7 @@ services:
       resources:
         limits:
           cpus: '0.1'
-          memory: 100M
+          memory: 250M
       labels:
         - traefik.enable=false
 
