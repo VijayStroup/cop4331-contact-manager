@@ -1,0 +1,48 @@
+version: '3'
+
+services:
+  app:
+    image: cop-app
+    networks:
+      - cop
+      - traefik-public
+    deploy:
+      labels:
+        - traefik.enable=true
+        - traefik.docker.network=traefik-public
+        - traefik.constraint-label=traefik-public
+        - traefik.http.routers.cop-web-http.rule=Host(`cm.vijaystroup.com`)
+        - traefik.http.routers.cop-web-http.entrypoints=http
+        - traefik.http.routers.cop-web-http.middlewares=https-redirect
+        - traefik.http.routers.cop-web-https.rule=Host(`cm.vijaystroup.com`)
+        - traefik.http.routers.cop-web-https.entrypoints=https
+        - traefik.http.routers.cop-web-https.tls=true
+        - traefik.http.routers.cop-web-https.tls.certresolver=le
+        - traefik.http.services.cop-web.loadbalancer.server.port=80
+    depends_on:
+      - mysql
+
+  mysql:
+    image: cop-db
+    volumes:
+      - cop-mysql:/var/lib/mysql
+    environment:
+      MYSQL_RANDOM_ROOT_PASSWORD: 'yes'
+      MYSQL_DATABASE: 'contacts'
+      MYSQL_USER: ${COP_USER?Variable not set}
+      MYSQL_PASSWORD: ${COP_PASS?Variable not set}
+    networks:
+      - cop
+    deploy:
+      labels:
+        - traefik.enable=false
+
+volumes:
+  cop-mysql:
+    external: true
+
+networks:
+  traefik-public:
+    external: true
+  cop:
+    internal: true

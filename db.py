@@ -1,3 +1,4 @@
+import json
 from models.models import Contact
 import mysql.connector
 from datetime import datetime
@@ -6,11 +7,14 @@ from middleware.hash import hash_password
 
 class DB:
     def __init__(self):
+        with open('secrets.json') as f:
+            secrets = json.loads(f.read())
+
         self.con = mysql.connector.connect(
-            host='localhost',
-            database='contacts',
-            user='user',
-            password='password'
+            host=secrets['DB_HOST'],
+            database=secrets['DB_DB'],
+            user=secrets['DB_USER'],
+            password=secrets['DB_PASS']
         )
         self.db = self.con.cursor()
         self.auth = None
@@ -181,9 +185,9 @@ class DB:
 
         try:
             self.db.execute('''SELECT * FROM contact
-                WHERE first_name LIKE %s OR last_name LIKE %s OR email LIKE %s
-                OR phone LIKE %s AND user_id=%s''',
-                (f'%{search}%', f'%{search}%', f'%{search}%', f'%{search}%', id))
+                WHERE user_id=%s AND first_name LIKE %s OR last_name LIKE %s OR email LIKE %s
+                OR phone LIKE %s''',
+                (id, f'%{search}%', f'%{search}%', f'%{search}%', f'%{search}%'))
             return (self.db.fetchall(), 0, None)
         except mysql.connector.Error as e:
             return (None, 500, e)

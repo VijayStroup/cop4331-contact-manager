@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+import json
 import jwt
 from fastapi import Security, HTTPException
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
@@ -8,7 +9,10 @@ class Auth:
     security = HTTPBearer()
 
     def __init__(self):
-        self.secret = 'secret'
+        with open('secrets.json') as f:
+            secrets = json.loads(f.read())
+
+        self.secret = secrets['JWT_SIG']
         self.db = None
 
     def setup(self, db):
