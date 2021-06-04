@@ -1,4 +1,4 @@
-FROM tiangolo/uvicorn-gunicorn:python3.8-alpine3.10
+FROM tiangolo/uvicorn-gunicorn-fastapi:python3.7
 WORKDIR /app
 COPY . .
-RUN pip install wheel fastapi[all] pyjwt mysql-connector-python
+RUN pip install -r requirements.txt
