@@ -42,11 +42,19 @@ def register(request: Request, token: Optional[str] = Cookie(None)):
 
 
 @router.get('/contacts', response_class=HTMLResponse)
-def contacts(request: Request, token: Optional[str] = Cookie(None)):
+def contacts(
+    request: Request,
+    search: Optional[str]=None,
+    token: Optional[str] = Cookie(None)
+):
     try: user = auth.decode_token(token)
     except HTTPException: return RedirectResponse('/login')
 
-    contacts, error, _ = db.get_contacts(user['id'])
+    if search:
+        contacts, error, _ = db.search(user['id'], search)
+    else:
+        contacts, error, _ = db.get_contacts(user['id'])
+
     if not error:
         return templates.TemplateResponse(
             'contacts.html',

@@ -1,6 +1,7 @@
 from clients import auth, db
 from models.models import Contact, User
 from fastapi import APIRouter, HTTPException, Depends
+from routers.pages import contacts
 
 router = APIRouter(
     prefix = '/api',
@@ -64,6 +65,8 @@ def get_all_contacts(user=Depends(auth.verify)):
 @router.get('/search')
 def search_contacts(search: str, user=Depends(auth.verify)):
     contacts, error, message = db.search(user['id'], search)
+    print(contacts, type(contacts))
+    return contacts()
 
     if not error: return {'contacts': contacts, 'error': message}
     else: raise HTTPException(status_code=error, detail=message)

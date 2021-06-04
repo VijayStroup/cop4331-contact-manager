@@ -179,7 +179,9 @@ class DB:
 
         try:
             self.db.execute('''SELECT * FROM contact
-                WHERE user_id = ? LIKE %?%''', (id, search))
+                WHERE first_name LIKE ? OR last_name LIKE ? OR email LIKE ?
+                OR phone LIKE ? AND user_id=?''',
+                (f'%{search}%', f'%{search}%', f'%{search}%', f'%{search}%', id))
             return (self.db.fetchall(), 0, None)
         except sqlite3.Error as e:
             return (None, 500, e)

@@ -2,7 +2,7 @@ const first_name = document.getElementById('contact-first_name')
 const last_name = document.getElementById('contact-last_name')
 const email = document.getElementById('contact-email')
 const phone = document.getElementById('contact-phone')
-const search = document.getElementById('search')
+const searchIn = document.getElementById('search')
 const errorNode = document.querySelector('#error')
 
 async function addContact() {
@@ -75,7 +75,6 @@ async function delContact(data) {
       'Accept': 'application/json',
       'Authorization': `Bearer ${jwt}`
     },
-    
     body: JSON.stringify(data)
   })
 
@@ -107,20 +106,8 @@ async function updateContact(id, data) {
   }
 }
 
-// search
-// document.querySelector('#search').addEventListener('click', () => {
-//   const jwt = getCookie('token');
+async function search() {
+  if (!searchIn.value) return
 
-//   fetch('/api/search", {
-//     method: 'get',
-//     headers: {
-//       "Content-Type": "application/json",
-//       "Accept": "application/json",
-//       "Authorization": `Bearer ${jwt}`
-//     },
-//     body: JSON.stringify(search.innerText)
-//   })
-
-//   .then(Response => Response.json())
-//   .then(search => console.log(search['contacts']))
-// })
+  window.location.replace(`/contacts?search=${searchIn.value}`)
+}
