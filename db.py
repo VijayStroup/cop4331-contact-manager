@@ -76,7 +76,7 @@ class DB:
                 return (409, 'Contact already exists')
             else: return (500, e)
 
-    def del_contact(self, id: int, contact: dict) -> tuple:
+    def del_contact(self, id: int, contact: Contact) -> tuple:
         """delete contact for the user"""
 
         try:

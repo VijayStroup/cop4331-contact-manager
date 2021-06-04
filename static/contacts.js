@@ -31,7 +31,51 @@ async function addContact() {
     errorNode.textContent = j.detail
   } else {
     errorNode.style.display = 'none'
-    window.location.replace('/contacts')
+    window.location.reload()
+  }
+}
+
+async function addRowHandlers() {
+  const table = document.getElementById('table')
+
+  const buttons = table.querySelectorAll('tr td button')
+  for (i = 0; i < buttons.length; i++) {
+    if (i % 2 == 0) { // save
+      // console.log(buttons[i])
+    } else { // delete
+      const createClickHandler = (btn) => {
+        return function() {
+          const row = btn.parentElement.parentElement
+          delContact({
+            first_name: row.children[1].children[0].value,
+            last_name: row.children[2].children[0].value,
+            email: row.children[3].children[0].value,
+            phone: row.children[4].children[0].value,
+          })
+        }
+      }  
+      buttons[i].onclick = createClickHandler(buttons[i]);
+    }
+  }
+}
+window.onload = addRowHandlers();
+
+async function delContact(data) {
+  const jwt = getCookie('token');
+
+  const res = await fetch("api/contact", {
+    method: 'DELETE',
+    headers:{
+      "Content-Type": "application/json",
+      "Accept": "application/json",
+      'Authorization': `Bearer ${jwt}`
+    },
+    
+    body: JSON.stringify(data)
+  })
+
+  if (res.ok) {
+    window.location.reload()
   }
 }
 
@@ -77,35 +121,4 @@ document.querySelector('#save-contact').addEventListener('click', () => {
 
   .then(Response => Response.json())
   .then(data => console.log('save contact'))
-})
-
-// delete contact row
-document.querySelector('#delete-contact').addEventListener('click', () => {
-
-  const jwt = getCookie('token');
-
-  const data = {
-    first_name: first_name.innerText,
-    last_name: last_name.innerText,
-    email: email.innerText,
-    phone: phone.innerText
-  }
-
-  fetch("api/contact", {
-    method: 'delete',
-    headers:{
-      "Content-Type": "application/json",
-      "Accept": "application/json",
-      'Authorization': `Bearer ${jwt}`
-    },
-    
-    body: JSON.stringify(data)
-  })
-
-  .then(Response => Response.json())
-  .then(data => console.log('delete contact'))
-
-  var id = document.getElementById("table-id").innerText;
-  document.getElementsByTagName("tr")[id].remove();
-
 })
