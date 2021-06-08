@@ -8,13 +8,13 @@ from middleware.hash import hash_password
 class DB:
     def __init__(self):
         with open('secrets.json') as f:
-            secrets = json.loads(f.read())
+            self.secrets = json.loads(f.read())
 
         self.con = mysql.connector.connect(
-            host=secrets['DB_HOST'],
-            database=secrets['DB_DB'],
-            user=secrets['DB_USER'],
-            password=secrets['DB_PASS']
+            host=self.secrets['DB_HOST'],
+            database=self.secrets['DB_DB'],
+            user=self.secrets['DB_USER'],
+            password=self.secrets['DB_PASS']
         )
         self.db = self.con.cursor()
         self.auth = None
@@ -22,6 +22,15 @@ class DB:
 
     def setup(self, auth):
         self.auth = auth
+
+    def keep_alive(self):
+        self.con = mysql.connector.connect(
+            host=self.secrets['DB_HOST'],
+            database=self.secrets['DB_DB'],
+            user=self.secrets['DB_USER'],
+            password=self.secrets['DB_PASS']
+        )
+        self.db = self.con.cursor()
 
     def init(self):
         """initalize database and tables if not created"""
@@ -62,6 +71,9 @@ class DB:
             return (0, None)
         except mysql.connector.Error as e:
             if e.errno == 1062: return (409, 'Username already exists')
+            if e.errno == 2013:
+                self.keep_alive()
+                return (503, 'Retry')
             else: return (500, e)
 
     def new_contact(self, id: int, contact: Contact) -> tuple:
@@ -80,6 +92,9 @@ class DB:
             return (0, None)
         except mysql.connector.Error as e:
             if e.errno == 1062: return (409, 'Contact already exists')
+            if e.errno == 2013:
+                self.keep_alive()
+                return (503, 'Retry')
             else: return (500, e)
 
     def del_contact(self, id: int, contact: Contact) -> tuple:
@@ -92,6 +107,9 @@ class DB:
             self.con.commit()
             return (0, None)
         except mysql.connector.Error as e:
+            if e.errno == 2013:
+                self.keep_alive()
+                return (503, 'Retry')
             return (500, e)
 
     def get_contacts(self, id: int) -> tuple:
@@ -104,6 +122,9 @@ class DB:
             contacts = self.db.fetchall()
             return (contacts, 0, None)
         except mysql.connector.Error as e:
+            if e.errno == 2013:
+                self.keep_alive()
+                return (None, 503, 'Retry')
             return (None, 500, e)
 
     def get_user(self, username: str, password: str) -> tuple:
@@ -127,6 +148,9 @@ class DB:
 
             return (user, self.auth.encode_token(user['id']), 0, None)
         except mysql.connector.Error as e:
+            if e.errno == 2013:
+                self.keep_alive()
+                return (None, None, 503, 'Retry')
             return (None, None, 500, e)
 
     def lookup_user(self, id: int) -> tuple:
@@ -148,6 +172,9 @@ class DB:
 
             return (user, 0, None)
         except mysql.connector.Error as e:
+            if e.errno == 2013:
+                self.keep_alive()
+                return (None, 503, 'Retry')
             return (None, 500, e)
 
     def update_user_activity(self, id: int) -> tuple:
@@ -161,6 +188,9 @@ class DB:
             self.con.commit()
             return (0, None)
         except mysql.connector.Error as e:
+            if e.errno == 2013:
+                self.keep_alive()
+                return (503, 'Retry')
             return (500, e)
 
     def update_contact(self, id: int, contact_id: str, contact: Contact) -> tuple:
@@ -178,6 +208,9 @@ class DB:
             return (0, None)
         except mysql.connector.Error as e:
             if e.errno == 1062: return (409, 'Contact already exists')
+            if e.errno == 2013:
+                self.keep_alive()
+                return (503, 'Retry')
             else: return (500, e)
 
     def search(self, id: int, search: str) -> tuple:
@@ -191,4 +224,7 @@ class DB:
                 (id, f'%{search}%', f'%{search}%', f'%{search}%', f'%{search}%'))
             return (self.db.fetchall(), 0, None)
         except mysql.connector.Error as e:
+            if e.errno == 2013:
+                self.keep_alive()
+                return (None, 503, 'Retry')
             return (None, 500, e)
