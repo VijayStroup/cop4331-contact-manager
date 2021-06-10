@@ -45,16 +45,15 @@ def register(request: Request, token: Optional[str] = Cookie(None)):
 def contacts(
     request: Request,
     search: Optional[str]=None,
+    all: Optional[str]=None,
     token: Optional[str] = Cookie(None)
 ):
     try: user = auth.decode_token(token)
     except HTTPException: return RedirectResponse('/login')
 
-    if search:
-        contacts, error, _ = db.search(user['id'], search)
-    else:
-        contacts, error, _ = db.get_contacts(user['id'])
-        contacts = []
+    if search: contacts, error, _ = db.search(user['id'], search)
+    elif all: contacts, error, _ = db.get_contacts(user['id'])
+    else: contacts = []
 
     if not error:
         return templates.TemplateResponse(

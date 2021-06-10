@@ -117,7 +117,7 @@ async function updateContact(id, data) {
 
 async function search() {
   if (!searchIn.value)
-    window.location.replace(`/contacts?search=`)
+    window.location.replace(`/contacts?all=True`)
 
   window.location.replace(`/contacts?search=${searchIn.value}`)
 }
