@@ -53,7 +53,8 @@ def contacts(
 
     if search: contacts, error, _ = db.search(user['id'], search)
     elif all: contacts, error, _ = db.get_contacts(user['id'])
-    else: contacts = []
+    else:
+        contacts, error = [], None
 
     if not error:
         return templates.TemplateResponse(
