@@ -54,6 +54,7 @@ def contacts(
         contacts, error, _ = db.search(user['id'], search)
     else:
         contacts, error, _ = db.get_contacts(user['id'])
+        contacts = []
 
     if not error:
         return templates.TemplateResponse(
